@@ -4,6 +4,6 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 	   					   http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="invoker" class="com.bluejeans.common.utils.InvokerSpringBean" />
+	<bean id="invoker" class="com.bluejeans.jin.InvokerSpringBean" />
 
 </beans>

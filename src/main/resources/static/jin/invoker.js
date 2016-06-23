@@ -1,10 +1,3 @@
-Ext.Loader
-		.loadScript('https://rawgit.com/joewalnes/smoothie/master/smoothie.js');
-Ext.Loader
-		.loadScript('https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js');
-Ext.Loader
-		.loadScript('https://cdn.jsdelivr.net/bluebird/latest/bluebird.min.js');
-
 Ext.require([ 'Ext.window.MessageBox', 'Ext.tip.*' ]);
 var params = Ext.urlDecode(location.search.substring(1));
 var host = location.hostname;

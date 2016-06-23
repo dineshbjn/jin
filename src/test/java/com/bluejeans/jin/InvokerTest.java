@@ -15,7 +15,7 @@ public class InvokerTest {
      */
     public static void main(final String[] args) {
         final InvokerSpringBean invoker = new InvokerSpringBean();
-        invoker.setLocaclJsEnabled(true);
+        // invoker.setLocaclJsEnabled(true);
         // invoker.setContextPrefix("test");
         invoker.getService().getInvoker().setTarget(new StringBuffer("again"));
         invoker.getService().getInvoker().setTarget("test", invoker);
