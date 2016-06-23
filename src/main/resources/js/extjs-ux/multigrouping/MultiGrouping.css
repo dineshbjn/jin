@@ -1,0 +1,23 @@
+.x-grid-group-hd .x-grid-group-title {
+    background:transparent no-repeat 0 -1px;
+    background-image: url(../../extjs/resources/themes/images/default/grid/group-collapse.gif);
+    padding: 0 0 0 14px;
+}
+.x-grid-group-title {
+    background-image: none;
+    padding: 0px;
+}
+
+/* line 510, ../themes/stylesheets/ext4/default/widgets/_grid.scss */
+.x-grid-group-hd-collapsed .x-grid-group-title {
+    background-image: url(../../extjs/resources/themes/images/default/grid/group-expand.gif);
+}
+.x-grid-group-no-expand .x-grid-group-title {
+    background-image: none !important;
+}
+
+/* Decoration only not need for multigrouping */
+.x-grid-group-hd.group-depth-0 .x-grid-group-title {
+    color: black;
+    font-size: 12px;
+}
