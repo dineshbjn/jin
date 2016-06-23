@@ -15,7 +15,8 @@ public class InvokerTest {
      */
     public static void main(final String[] args) {
         final InvokerSpringBean invoker = new InvokerSpringBean();
-        //invoker.setContextPrefix("test");
+        invoker.setLocaclJsEnabled(true);
+        // invoker.setContextPrefix("test");
         invoker.getService().getInvoker().setTarget(new StringBuffer("again"));
         invoker.getService().getInvoker().setTarget("test", invoker);
         // invoker.setExtjsResourcePrefix("https://cdn.rawgit.com/cdnjs/cdnjs/master/ajax/libs/extjs/4.2.1");
