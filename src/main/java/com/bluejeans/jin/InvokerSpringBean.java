@@ -175,20 +175,4 @@ public class InvokerSpringBean implements ApplicationContextAware {
         service.setMiscjsResourcePrefix(miscjsResourcePrefix);
     }
 
-    /**
-     * @return
-     * @see com.bluejeans.jin.InvokerService#isLocaclJsEnabled()
-     */
-    public boolean isLocaclJsEnabled() {
-        return service.isLocaclJsEnabled();
-    }
-
-    /**
-     * @param locaclJsEnabled
-     * @see com.bluejeans.jin.InvokerService#setLocaclJsEnabled(boolean)
-     */
-    public void setLocaclJsEnabled(final boolean locaclJsEnabled) {
-        service.setLocaclJsEnabled(locaclJsEnabled);
-    }
-
 }

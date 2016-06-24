@@ -489,6 +489,11 @@ public class InvokerService {
         public static final String MAIN_PREFIX = "main";
 
         /**
+         * The local main uri prefix.
+         */
+        public static final String LOCAL_MAIN_PREFIX = "_main";
+
+        /**
          * The static resource prefix.
          */
         public static final String STATIC_PREFIX = "static";
@@ -499,9 +504,14 @@ public class InvokerService {
         public final InvokerInfoBuffer defaultBuffer = new InvokerInfoBuffer();
 
         /**
-         * The default buffer.
+         * The main html buffer.
          */
         public final InvokerInfoBuffer mainHtmlBuffer = new InvokerInfoBuffer();
+
+        /**
+         * The local main html buffer.
+         */
+        public final InvokerInfoBuffer localMainHtmlBuffer = new InvokerInfoBuffer();
 
         /**
          * Process the given URI and return the info buffer for its response.
@@ -529,6 +539,8 @@ public class InvokerService {
                 invoker.appendRunValue(responseBuffer, URLDecoder.decode(uriSpec[1], "UTF-8"));
             } else if (uriSpec[0].startsWith(InvokerServerHttpHandler.MAIN_PREFIX)) {
                 responseBuffer = mainHtmlBuffer.clone();
+            } else if (uriSpec[0].startsWith(InvokerServerHttpHandler.LOCAL_MAIN_PREFIX)) {
+                responseBuffer = localMainHtmlBuffer.clone();
             } else if (uriSpec[0].equalsIgnoreCase(InvokerServerHttpHandler.STATIC_PREFIX)) {
                 responseBuffer = new InvokerInfoBuffer(InvokerInfoBuffer.DOUBLE_MAX_CAPACITY);
                 responseBuffer.byteBuf.writeBytes(MetaUtil.getResourceAsBytes(
@@ -633,8 +645,6 @@ public class InvokerService {
 
     private String invokerjsResourcePrefix = "https://rawgit.com/bluejeansnet/jin/master/src/main/resources/static/jin";
 
-    private boolean locaclJsEnabled = false;
-
     private volatile boolean running;
 
     /**
@@ -716,17 +726,14 @@ public class InvokerService {
             nettyServerRef.initWithPort(currentPort);
             future = nettyServerRef.getServerBootstrap().bind().syncUninterruptibly();
         }
-        if (locaclJsEnabled) {
-            nettyServerRef.getChannelInitializer().getHandler().mainHtmlBuffer.appendString(MetaUtil
-                    .getResourceAsString("/jin.html").replaceAll("<extjsPrefix>", this.contextPrefix + "/static/extjs")
-                    .replaceAll("<miscjsPrefix>", this.contextPrefix + "/static/misc")
-                    .replaceAll("<invokerjsPrefix>", this.contextPrefix + "/static/jin"));
-        } else {
-            nettyServerRef.getChannelInitializer().getHandler().mainHtmlBuffer.appendString(
-                    MetaUtil.getResourceAsString("/jin.html").replaceAll("<extjsPrefix>", extjsResourcePrefix)
-                    .replaceAll("<miscjsPrefix>", miscjsResourcePrefix)
-                    .replaceAll("<invokerjsPrefix>", invokerjsResourcePrefix));
-        }
+        nettyServerRef.getChannelInitializer().getHandler().mainHtmlBuffer.appendString(
+                MetaUtil.getResourceAsString("/jin.html").replaceAll("<extjsPrefix>", extjsResourcePrefix)
+                .replaceAll("<miscjsPrefix>", miscjsResourcePrefix)
+                .replaceAll("<invokerjsPrefix>", invokerjsResourcePrefix));
+        nettyServerRef.getChannelInitializer().getHandler().localMainHtmlBuffer.appendString(MetaUtil
+                .getResourceAsString("/jin.html").replaceAll("<extjsPrefix>", this.contextPrefix + "/static/extjs")
+                .replaceAll("<miscjsPrefix>", this.contextPrefix + "/static/misc")
+                .replaceAll("<invokerjsPrefix>", this.contextPrefix + "/static/jin"));
         final ChannelFuture serverFuture = future;
         new Thread(new Runnable() {
             /*
@@ -866,21 +873,6 @@ public class InvokerService {
      */
     public void setMiscjsResourcePrefix(final String miscjsResourcePrefix) {
         this.miscjsResourcePrefix = miscjsResourcePrefix;
-    }
-
-    /**
-     * @return the locaclJsEnabled
-     */
-    public boolean isLocaclJsEnabled() {
-        return locaclJsEnabled;
-    }
-
-    /**
-     * @param locaclJsEnabled
-     *            the locaclJsEnabled to set
-     */
-    public void setLocaclJsEnabled(final boolean locaclJsEnabled) {
-        this.locaclJsEnabled = locaclJsEnabled;
     }
 
     /**
