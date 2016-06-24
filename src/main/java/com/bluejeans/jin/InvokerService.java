@@ -629,6 +629,8 @@ public class InvokerService {
 
     private String extjsResourcePrefix = "https://cdn.rawgit.com/bluejeansnet/jin/master/src/main/resources/static/extjs";
 
+    private String miscjsResourcePrefix = "https://cdn.rawgit.com/bluejeansnet/jin/master/src/main/resources/static/misc";
+
     private String invokerjsResourcePrefix = "https://rawgit.com/bluejeansnet/jin/master/src/main/resources/static/jin";
 
     private boolean locaclJsEnabled = false;
@@ -717,10 +719,12 @@ public class InvokerService {
         if (locaclJsEnabled) {
             nettyServerRef.getChannelInitializer().getHandler().mainHtmlBuffer.appendString(MetaUtil
                     .getResourceAsString("/jin.html").replaceAll("<extjsPrefix>", this.contextPrefix + "/static/extjs")
+                    .replaceAll("<miscjsPrefix>", this.contextPrefix + "/static/misc")
                     .replaceAll("<invokerjsPrefix>", this.contextPrefix + "/static/jin"));
         } else {
             nettyServerRef.getChannelInitializer().getHandler().mainHtmlBuffer.appendString(
                     MetaUtil.getResourceAsString("/jin.html").replaceAll("<extjsPrefix>", extjsResourcePrefix)
+                    .replaceAll("<miscjsPrefix>", miscjsResourcePrefix)
                     .replaceAll("<invokerjsPrefix>", invokerjsResourcePrefix));
         }
         final ChannelFuture serverFuture = future;
@@ -848,6 +852,20 @@ public class InvokerService {
      */
     public void setInvokerjsResourcePrefix(final String invokerjsResourcePrefix) {
         this.invokerjsResourcePrefix = invokerjsResourcePrefix;
+    }
+
+    /**
+     * @return the miscjsResourcePrefix
+     */
+    public String getMiscjsResourcePrefix() {
+        return miscjsResourcePrefix;
+    }
+
+    /**
+     * @param miscjsResourcePrefix the miscjsResourcePrefix to set
+     */
+    public void setMiscjsResourcePrefix(final String miscjsResourcePrefix) {
+        this.miscjsResourcePrefix = miscjsResourcePrefix;
     }
 
     /**

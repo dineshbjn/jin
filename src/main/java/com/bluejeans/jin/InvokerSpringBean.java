@@ -19,161 +19,176 @@ import org.springframework.stereotype.Component;
 @Component
 public class InvokerSpringBean implements ApplicationContextAware {
 
-	private final InvokerService service;
+    private final InvokerService service;
 
-	private ApplicationContext context;
+    private ApplicationContext context;
 
-	private String contextPrefix = "";
+    private String contextPrefix = "";
 
-	private String title = "Java Interpreter";
+    private String title = "Java Interpreter";
 
-	/**
-	 * The default one
-	 */
-	public InvokerSpringBean() {
-		service = new InvokerService();
-		service.getInvoker().setTarget("spring", this);
-	}
+    /**
+     * The default one
+     */
+    public InvokerSpringBean() {
+        service = new InvokerService();
+        service.getInvoker().setTarget("spring", this);
+    }
 
-	/**
-	 * With port and targets
-	 *
-	 * @param port
-	 *            the port to use
-	 * @param targets
-	 *            the targets
-	 */
-	public InvokerSpringBean(final int port, final Object... targets) {
-		service = new InvokerService(port, targets);
-		service.getInvoker().setTarget("spring", this);
-	}
+    /**
+     * With port and targets
+     *
+     * @param port
+     *            the port to use
+     * @param targets
+     *            the targets
+     */
+    public InvokerSpringBean(final int port, final Object... targets) {
+        service = new InvokerService(port, targets);
+        service.getInvoker().setTarget("spring", this);
+    }
 
-	/**
-	 * @return the service
-	 */
-	public InvokerService getService() {
-		return service;
-	}
+    /**
+     * @return the service
+     */
+    public InvokerService getService() {
+        return service;
+    }
 
-	/**
-	 * @return the context
-	 */
-	public ApplicationContext getContext() {
-		return context;
-	}
+    /**
+     * @return the context
+     */
+    public ApplicationContext getContext() {
+        return context;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * org.springframework.context.ApplicationContextAware#setApplicationContext
-	 * (org.springframework.context.ApplicationContext)
-	 */
-	@Override
-	public void setApplicationContext(final ApplicationContext context) throws BeansException {
-		this.context = context;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.springframework.context.ApplicationContextAware#setApplicationContext
+     * (org.springframework.context.ApplicationContext)
+     */
+    @Override
+    public void setApplicationContext(final ApplicationContext context) throws BeansException {
+        this.context = context;
+    }
 
-	/**
-	 * Initialize.
-	 */
-	@PostConstruct
-	public void init() {
-		try {
-			service.start(contextPrefix);
-		} catch (final Exception ex) {
-			// do nothing.
-		}
-	}
+    /**
+     * Initialize.
+     */
+    @PostConstruct
+    public void init() {
+        try {
+            service.start(contextPrefix);
+        } catch (final Exception ex) {
+            // do nothing.
+        }
+    }
 
-	/**
-	 * Destroy
-	 */
-	@PreDestroy
-	public void destroy() {
-		try {
-			service.stop();
-		} catch (final Exception ex) {
-			// do nothing.
-		}
-	}
+    /**
+     * Destroy
+     */
+    @PreDestroy
+    public void destroy() {
+        try {
+            service.stop();
+        } catch (final Exception ex) {
+            // do nothing.
+        }
+    }
 
-	/**
-	 * @return the contextPrefix
-	 */
-	public String getContextPrefix() {
-		return contextPrefix;
-	}
+    /**
+     * @return the contextPrefix
+     */
+    public String getContextPrefix() {
+        return contextPrefix;
+    }
 
-	/**
-	 * @param contextPrefix
-	 *            the contextPrefix to set
-	 */
-	public void setContextPrefix(final String contextPrefix) {
-		this.contextPrefix = contextPrefix;
-	}
+    /**
+     * @param contextPrefix
+     *            the contextPrefix to set
+     */
+    public void setContextPrefix(final String contextPrefix) {
+        this.contextPrefix = contextPrefix;
+    }
 
-	/**
-	 * @return the title
-	 */
-	public String getTitle() {
-		return title;
-	}
+    /**
+     * @return the title
+     */
+    public String getTitle() {
+        return title;
+    }
 
-	/**
-	 * @param title
-	 *            the title to set
-	 */
-	public void setTitle(final String title) {
-		this.title = title;
-	}
+    /**
+     * @param title
+     *            the title to set
+     */
+    public void setTitle(final String title) {
+        this.title = title;
+    }
 
-	/**
-	 * @return
-	 * @see com.bluejeans.jin.InvokerService#getExtjsResourcePrefix()
-	 */
-	public String getExtjsResourcePrefix() {
-		return service.getExtjsResourcePrefix();
-	}
+    /**
+     * @return
+     * @see com.bluejeans.jin.InvokerService#getExtjsResourcePrefix()
+     */
+    public String getExtjsResourcePrefix() {
+        return service.getExtjsResourcePrefix();
+    }
 
-	/**
-	 * @param extjsResourcePrefix
-	 * @see com.bluejeans.jin.InvokerService#setExtjsResourcePrefix(java.lang.String)
-	 */
-	public void setExtjsResourcePrefix(final String extjsResourcePrefix) {
-		service.setExtjsResourcePrefix(extjsResourcePrefix);
-	}
+    /**
+     * @param extjsResourcePrefix
+     * @see com.bluejeans.jin.InvokerService#setExtjsResourcePrefix(java.lang.String)
+     */
+    public void setExtjsResourcePrefix(final String extjsResourcePrefix) {
+        service.setExtjsResourcePrefix(extjsResourcePrefix);
+    }
 
-	/**
-	 * @return
-	 * @see com.bluejeans.jin.InvokerService#getInvokerjsResourcePrefix()
-	 */
-	public String getInvokerjsResourcePrefix() {
-		return service.getInvokerjsResourcePrefix();
-	}
+    /**
+     * @return
+     * @see com.bluejeans.jin.InvokerService#getInvokerjsResourcePrefix()
+     */
+    public String getInvokerjsResourcePrefix() {
+        return service.getInvokerjsResourcePrefix();
+    }
 
-	/**
-	 * @param invokerjsResourcePrefix
-	 * @see com.bluejeans.jin.InvokerService#setInvokerjsResourcePrefix(java.lang.String)
-	 */
-	public void setInvokerjsResourcePrefix(final String invokerjsResourcePrefix) {
-		service.setInvokerjsResourcePrefix(invokerjsResourcePrefix);
-	}
+    /**
+     * @param invokerjsResourcePrefix
+     * @see com.bluejeans.jin.InvokerService#setInvokerjsResourcePrefix(java.lang.String)
+     */
+    public void setInvokerjsResourcePrefix(final String invokerjsResourcePrefix) {
+        service.setInvokerjsResourcePrefix(invokerjsResourcePrefix);
+    }
 
-	/**
-	 * @return
-	 * @see com.bluejeans.jin.InvokerService#isLocaclJsEnabled()
-	 */
-	public boolean isLocaclJsEnabled() {
-		return service.isLocaclJsEnabled();
-	}
+    /**
+     * @return miscjsResourcePrefix
+     * @see com.bluejeans.jin.InvokerService#getMiscjsResourcePrefix()
+     */
+    public String getMiscjsResourcePrefix() {
+        return service.getMiscjsResourcePrefix();
+    }
 
-	/**
-	 * @param locaclJsEnabled
-	 * @see com.bluejeans.jin.InvokerService#setLocaclJsEnabled(boolean)
-	 */
-	public void setLocaclJsEnabled(boolean locaclJsEnabled) {
-		service.setLocaclJsEnabled(locaclJsEnabled);
-	}
+    /**
+     * @param miscjsResourcePrefix
+     * @see com.bluejeans.jin.InvokerService#setMiscjsResourcePrefix(java.lang.String)
+     */
+    public void setMiscjsResourcePrefix(final String miscjsResourcePrefix) {
+        service.setMiscjsResourcePrefix(miscjsResourcePrefix);
+    }
+
+    /**
+     * @return
+     * @see com.bluejeans.jin.InvokerService#isLocaclJsEnabled()
+     */
+    public boolean isLocaclJsEnabled() {
+        return service.isLocaclJsEnabled();
+    }
+
+    /**
+     * @param locaclJsEnabled
+     * @see com.bluejeans.jin.InvokerService#setLocaclJsEnabled(boolean)
+     */
+    public void setLocaclJsEnabled(final boolean locaclJsEnabled) {
+        service.setLocaclJsEnabled(locaclJsEnabled);
+    }
 
 }
