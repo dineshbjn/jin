@@ -4,7 +4,7 @@
 
 	<groupId>com.bluejeans</groupId>
 	<artifactId>jin</artifactId>
-	<version>1.0</version>
+	<version>1.1</version>
 	<packaging>jar</packaging>
 
 	<name>jin</name>
@@ -22,7 +22,13 @@
 	<developers>
 		<developer>
 			<name>Dinesh Ilindra</name>
-			<email>dinesh@bluejeansnet.com; ilndinesh@gmail.com</email>
+			<email>dinesh@bluejeans.com; ilndinesh@gmail.com</email>
+			<organization>Blue Jeans</organization>
+			<organizationUrl>http://www.bluejeans.com</organizationUrl>
+		</developer>
+		<developer>
+			<name>Sachin Mule</name>
+			<email>sachin@bluejeans.com; sachamul@gmail.com</email>
 			<organization>Blue Jeans</organization>
 			<organizationUrl>http://www.bluejeans.com</organizationUrl>
 		</developer>
