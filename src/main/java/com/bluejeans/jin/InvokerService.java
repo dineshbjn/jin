@@ -878,14 +878,21 @@ public class InvokerService {
     /**
      * The singleton instance.
      */
-    private static InvokerService service = new InvokerService();
+    private static InvokerService service;
 
     /**
      * Returns the singleton instance.
      *
      * @return the singleton instance
      */
-    public static InvokerService instance() {
+    public static InvokerService getInstance() {
+        if(service==null) {
+            synchronized(InvokerService.class) {
+                if(service==null) {
+                    service = new InvokerService();
+                }
+            }
+        }
         return InvokerService.service;
     }
 
@@ -896,8 +903,8 @@ public class InvokerService {
      *            the targets
      */
     public static void start(final Object... targets) {
-        InvokerService.service.invoker.addTargets(targets);
-        InvokerService.service.start();
+        InvokerService.getInstance().invoker.addTargets(targets);
+        InvokerService.getInstance().start();
     }
 
     /**
