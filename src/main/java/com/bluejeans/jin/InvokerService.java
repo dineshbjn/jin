@@ -523,10 +523,23 @@ public class InvokerService {
          *             if decoding fails
          */
         public InvokerInfoBuffer processRequest(final FullHttpRequest request) throws IOException {
-            if (!request.getUri().startsWith(contextPrefix)) {
+            return processRequest(request.getUri());
+        }
+
+        /**
+         * Process the given URI and return the info buffer for its response.
+         *
+         * @param requestUri
+         *            the http request uri
+         * @return the response buffer
+         * @throws IOException
+         *             if decoding fails
+         */
+        public InvokerInfoBuffer processRequest(final String requestUri) throws IOException {
+            if (!requestUri.startsWith(contextPrefix)) {
                 return defaultBuffer;
             }
-            final String[] uriSpec = request.getUri().substring(contextPrefix.length() + 1).split(SLASH, 3);
+            final String[] uriSpec = requestUri.substring(contextPrefix.length() + 1).split(SLASH, 3);
             InvokerInfoBuffer responseBuffer = null;
             if (uriSpec[0].equalsIgnoreCase(InvokerServerHttpHandler.VALUE_PREFIX)) {
                 responseBuffer = new InvokerInfoBuffer();
@@ -544,9 +557,9 @@ public class InvokerService {
             } else if (uriSpec[0].equalsIgnoreCase(InvokerServerHttpHandler.STATIC_PREFIX)) {
                 responseBuffer = new InvokerInfoBuffer(InvokerInfoBuffer.DOUBLE_MAX_CAPACITY);
                 responseBuffer.byteBuf.writeBytes(MetaUtil.getResourceAsBytes(
-                        URLDecoder.decode(request.getUri().substring(contextPrefix.length()), "UTF-8")));
+                        URLDecoder.decode(requestUri.substring(contextPrefix.length()), "UTF-8")));
             } else {
-                responseBuffer = InvokerService.this.processRequest(request, uriSpec);
+                return defaultBuffer;
             }
             return responseBuffer;
         }
@@ -731,9 +744,9 @@ public class InvokerService {
                 .replaceAll("<miscjsPrefix>", miscjsResourcePrefix)
                 .replaceAll("<invokerjsPrefix>", invokerjsResourcePrefix));
         nettyServerRef.getChannelInitializer().getHandler().localMainHtmlBuffer.appendString(MetaUtil
-                .getResourceAsString("/jin.html").replaceAll("<extjsPrefix>", this.contextPrefix + "/static/extjs")
-                .replaceAll("<miscjsPrefix>", this.contextPrefix + "/static/misc")
-                .replaceAll("<invokerjsPrefix>", this.contextPrefix + "/static/jin"));
+                .getResourceAsString("/jin.html").replaceAll("<extjsPrefix>", "static/extjs")
+                .replaceAll("<miscjsPrefix>", "static/misc")
+                .replaceAll("<invokerjsPrefix>", "static/jin"));
         final ChannelFuture serverFuture = future;
         new Thread(new Runnable() {
             /*

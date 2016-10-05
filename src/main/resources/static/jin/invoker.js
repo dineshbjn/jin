@@ -38,7 +38,8 @@ if (dev) {
 	write = true;
 	cluster = true;
 }
-var hostPrefix = 'http://' + host + ':' + port + '/';
+var currLocation = location.toString();
+var hostPrefix = currLocation.substring(0, currLocation.lastIndexOf('/') + 1);
 document.title = 'JIN - ' + 'Java Inspector' + ' - ' + host;
 var idCounter = 0;
 var leafTypes = [ "java.lang.String", "java.lang.Double", "java.lang.Float",
@@ -312,6 +313,7 @@ var graphPanel = Ext.create("Ext.form.Panel", {
 
 function getJins() {
 	var jins = [];
+	if(port == "") return jins;
 	for ( var i = 0; i < 20; i++) {
 		var currPort = 5678 + i;
 		var prefix = 'http://' + host + ':' + currPort + '/';
