@@ -19,13 +19,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class InvokerSpringBean implements ApplicationContextAware {
 
+    public static final String INVOKER_TITLE = "Java Interpreter";
+
     private final InvokerService service;
 
     private ApplicationContext context;
 
     private String contextPrefix = "";
 
-    private String title = "Java Interpreter";
+    private String title = INVOKER_TITLE;
 
     /**
      * The default one
