@@ -146,13 +146,13 @@ var treePanel = Ext
 								if (cluster) {
 									try {
 										var urls = [];
-										for ( var i = 0; i < clusterList.length; i++) {
+										for (var i = 0; i < clusterList.length; i++) {
 											if (clusterList[i].indexOf(':') > 0) {
 												urls.push('http://'
 														+ clusterList[i] + '/'
 														+ node.raw.uri);
 											} else {
-												for ( var j = 0; j < 20; j++) {
+												for (var j = 0; j < 20; j++) {
 													urls.push('http://'
 															+ clusterList[i]
 															+ ':' + (5678 + j)
@@ -313,8 +313,9 @@ var graphPanel = Ext.create("Ext.form.Panel", {
 
 function getJins() {
 	var jins = [];
-	if(port == "") return jins;
-	for ( var i = 0; i < 20; i++) {
+	if (port == "")
+		return jins;
+	for (var i = 0; i < 20; i++) {
 		var currPort = 5678 + i;
 		var prefix = 'http://' + host + ':' + currPort + '/';
 		var title = '';
@@ -365,7 +366,7 @@ function getObject(path, meta, callback) {
 		var resp = getData(hostPrefix + objPath + "..keySet");
 		var elements = resp.split('\n');
 
-		for ( var i = 0; i < elements.length && i < 100; i++) {
+		for (var i = 0; i < elements.length && i < 100; i++) {
 			var name = elements[i];
 			getDataAsync(hostPrefix + objPath + "..getValue~~" + name
 					+ "..getClass..getName", {
@@ -397,7 +398,7 @@ function getObject(path, meta, callback) {
 		var resp = getData(hostPrefix + objPath + "..keySet");
 		var elements = resp.split('\n');
 
-		for ( var i = 0; i < elements.length && i < 100; i++) {
+		for (var i = 0; i < elements.length && i < 100; i++) {
 			var name = elements[i];
 			getDataAsync(hostPrefix + objPath + ".." + name
 					+ "..getClass..getName", {
@@ -427,7 +428,7 @@ function getObject(path, meta, callback) {
 		var temp = [];
 		var objPath = path.substring(0, path.indexOf("_listData") - 2);
 		var size = parseInt(getData(hostPrefix + objPath + "..size"));
-		for ( var i = 0; i < size; i++) {
+		for (var i = 0; i < size; i++) {
 			var name = i;
 			getDataAsync(hostPrefix + objPath + ".." + name, {
 				name : name + "",
@@ -466,7 +467,7 @@ function getObject(path, meta, callback) {
 
 	if (isArray == "true") {
 		var length = parseInt(getData(hostPrefix + path + ".._length"));
-		for ( var i = 0; i < length; i++) {
+		for (var i = 0; i < length; i++) {
 			var name = i;
 			getDataAsync(hostPrefix + path + ".." + name, {
 				name : name + "",
@@ -497,7 +498,7 @@ function getObject(path, meta, callback) {
 	} else {
 		var allInterfaces = getData(hostPrefix + path + ".._interfaces");
 		var interfaces = allInterfaces.split('\n');
-		for ( var i = 0; i < interfaces.length; i++) {
+		for (var i = 0; i < interfaces.length; i++) {
 			if (interfaces[i].indexOf("java.util.Map") > 0) {
 				var className = getData(hostPrefix + path
 						+ "..getClass..getSimpleName");
@@ -532,7 +533,7 @@ function getObject(path, meta, callback) {
 		var resp = getData(hostPrefix + path + ".._fields");
 		var elements = resp.split('\n');
 		var fieldMap = {};
-		for ( var i = 0; i < elements.length; i++) {
+		for (var i = 0; i < elements.length; i++) {
 			var element = elements[i];
 			var temparr = element.split(" ");
 			var type = temparr[temparr.length - 2];
@@ -589,7 +590,7 @@ function getObject(path, meta, callback) {
 			}
 		}
 		var methodMap = {};
-		for ( var i = 0; i < elements.length; i++) {
+		for (var i = 0; i < elements.length; i++) {
 			var element = elements[i];
 			var temparr = element.split(" ");
 			var type = temparr[temparr.length - 2];
@@ -655,7 +656,7 @@ function expandChildWithUri(node, uri) {
 	}
 	node.expand();
 	// uri = uri.substring(uri.indexOf('~~') + 1);
-	for ( var i = 0; i < node.childNodes.length; i++) {
+	for (var i = 0; i < node.childNodes.length; i++) {
 		if (node.childNodes[i].raw.text.startsWith('_')
 				&& (uri.indexOf('..~') > 0 || uri.indexOf('getValue~~') > 0)) {
 			node.childNodes[i].expand();
@@ -678,7 +679,7 @@ function expandNodeWithUri(uri) {
 	var prefix = 'do/' + uri.substring(0, index + 2);
 	var uriNodeData = uri.substring(index + 2).split("..");
 	var currentNode = store.tree.root;
-	for ( var i = 0; i < uriNodeData.length; i++) {
+	for (var i = 0; i < uriNodeData.length; i++) {
 		currentNode = expandChildWithUri(currentNode, prefix + uriNodeData[i]);
 		prefix = prefix + uriNodeData[i] + "..";
 	}
@@ -697,7 +698,7 @@ function populateRoot() {
 		document.title = 'JIN - ' + getData(hostPrefix + 'do/spring/title')
 				+ ' - ' + host;
 	}
-	for ( var i = 0; i < beanElements.length; i++) {
+	for (var i = 0; i < beanElements.length; i++) {
 		var beanElement = beanElements[i];
 		if (dotted || beanElement.indexOf(".") == -1) {
 			if (beanElement != '') {
@@ -730,10 +731,12 @@ function populateRoot() {
 	beanDefs = getData(hostPrefix + springPrefix
 			+ "..getParent..getBeanDefinitionNames");
 	beanElements = beanDefs.split('\n');
-	for ( var i = 0; i < beanElements.length; i++) {
+	for (var i = 0; i < beanElements.length; i++) {
 		var beanElement = beanElements[i];
 		if (dotted || beanElement.indexOf(".") == -1) {
-			if (beanElement != '') {
+			if (beanElement != '' && beanElement != 'invokerSpringBean'
+					&& beanElement != 'invokerController'
+					&& beanElement != 'invokerControllerPlus') {
 				getDataAsync(hostPrefix + springPrefix
 						+ "..getParent..getBean~~" + beanElement
 						+ "..getClass..getName", {
@@ -765,7 +768,7 @@ function populateRoot() {
 	var targetPrefix = "do/service/invoker..targetMap";
 	var targetKeys = getData(hostPrefix + targetPrefix + "..keySet");
 	var targetElements = targetKeys.split('\n');
-	for ( var i = 0; i < targetElements.length; i++) {
+	for (var i = 0; i < targetElements.length; i++) {
 		var targetElement = targetElements[i];
 		if (targetElement != '' && targetElement != 'system'
 				&& targetElement != 'service' && targetElement != 'spring') {
@@ -797,7 +800,7 @@ function populateRoot() {
 }
 
 function ticker() {
-	for ( var i = 0; i < objectPanel.items.items.length; i++) {
+	for (var i = 0; i < objectPanel.items.items.length; i++) {
 		var item = objectPanel.items.items[i];
 		if (item.uri) {
 			getDataAsync(hostPrefix + item.uri, {
