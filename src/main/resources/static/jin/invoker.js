@@ -701,7 +701,9 @@ function populateRoot() {
 	for (var i = 0; i < beanElements.length; i++) {
 		var beanElement = beanElements[i];
 		if (dotted || beanElement.indexOf(".") == -1) {
-			if (beanElement != '') {
+			if (beanElement != '' && beanElement != 'invokerSpringBean'
+					&& beanElement != 'invokerController'
+					&& beanElement != 'invokerControllerPlus') {
 				getDataAsync(hostPrefix + springPrefix + "..getBean~~"
 						+ beanElement + "..getClass..getName", {
 					springPrefix : springPrefix,
