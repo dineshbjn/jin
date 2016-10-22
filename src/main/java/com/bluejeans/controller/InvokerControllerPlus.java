@@ -1,4 +1,4 @@
-package com.bluejeans.jin;
+package com.bluejeans.controller;
 
 import java.io.IOException;
 
