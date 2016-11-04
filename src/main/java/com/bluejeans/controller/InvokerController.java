@@ -49,6 +49,13 @@ public class InvokerController {
         return invokerApi("/do/" + bean + "/" + data);
     }
 
+    @GET
+    @Path("/invoker/run/{data}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response invokerRun(@PathParam("data") final String data) throws IOException {
+        return invokerApi("/run/" + data);
+    }
+
     public Response invokerApi(final String requestUri) throws IOException {
         logger.debug("processing invoker uri - " + requestUri);
         return Response.status(200).entity(invokerBean.getService().getNettyServerRef().getChannelInitializer()

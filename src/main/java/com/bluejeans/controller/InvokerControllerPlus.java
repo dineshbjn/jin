@@ -23,13 +23,6 @@ public class InvokerControllerPlus extends InvokerController {
     }
 
     @GET
-    @Path("/invoker/run/{data}")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response invokerRun(@PathParam("data") final String data) throws IOException {
-        return invokerApi("/run/" + data);
-    }
-
-    @GET
     @Path("/invoker/value/{bean}/{data}")
     @Produces(MediaType.TEXT_PLAIN)
     public Response invokerValue(@PathParam("bean") final String bean, @PathParam("data") final String data)
