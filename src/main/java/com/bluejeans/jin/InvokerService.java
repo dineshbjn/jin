@@ -6,6 +6,7 @@ package com.bluejeans.jin;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.lang.instrument.Instrumentation;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.util.Map;
@@ -13,6 +14,8 @@ import java.util.concurrent.TimeUnit;
 
 import com.bluejeans.utils.MetaUtil;
 import com.bluejeans.utils.URIInvoker;
+import com.bluejeans.utils.javaagent.InstrumentationAgent;
+import com.ea.agentloader.AgentLoader;
 import com.google.gson.Gson;
 
 import fi.iki.elonen.SimpleWebServer;
@@ -85,16 +88,14 @@ public class InvokerService {
         private final int maxCapacity;
 
         /**
-         * Creates default info buffer with unpooled heap buffer and UTF8
-         * charset.
+         * Creates default info buffer with unpooled heap buffer and UTF8 charset.
          */
         public InvokerInfoBuffer() {
             this(Unpooled.buffer(InvokerInfoBuffer.MIN_CAPACITY, InvokerInfoBuffer.MAX_CAPACITY), CharsetUtil.UTF_8);
         }
 
         /**
-         * Creates default info buffer with unpooled heap buffer and UTF8
-         * charset.
+         * Creates default info buffer with unpooled heap buffer and UTF8 charset.
          *
          * @param maxCapacity
          *            the maximum capacity
@@ -146,8 +147,8 @@ public class InvokerService {
         }
 
         /**
-         * Returns true if and only if this string representation of the buffer
-         * contains the specified sequence of char values.
+         * Returns true if and only if this string representation of the buffer contains the
+         * specified sequence of char values.
          *
          * @param sequence
          *            the char sequence
@@ -159,9 +160,9 @@ public class InvokerService {
         }
 
         /**
-         * Transfers the specified strings byte data, based on the charset, to
-         * the buffer starting at the current writerIndex and increases the
-         * writerIndex by the number of the transferred bytes (= bytes.length).
+         * Transfers the specified strings byte data, based on the charset, to the buffer starting
+         * at the current writerIndex and increases the writerIndex by the number of the transferred
+         * bytes (= bytes.length).
          *
          * @param str
          *            the string
@@ -190,9 +191,9 @@ public class InvokerService {
         }
 
         /**
-         * Appends the given value as a string to the buffer. The argument is
-         * converted to a string as if by the method String.valueOf, and the
-         * characters of that string are then appended to the buffer.
+         * Appends the given value as a string to the buffer. The argument is converted to a string
+         * as if by the method String.valueOf, and the characters of that string are then appended
+         * to the buffer.
          *
          * @param booleanValue
          *            the boolean value
@@ -203,9 +204,9 @@ public class InvokerService {
         }
 
         /**
-         * Appends the given value as a string to the buffer. The argument is
-         * converted to a string as if by the method String.valueOf, and the
-         * characters of that string are then appended to the buffer.
+         * Appends the given value as a string to the buffer. The argument is converted to a string
+         * as if by the method String.valueOf, and the characters of that string are then appended
+         * to the buffer.
          *
          * @param intValue
          *            the int value
@@ -216,9 +217,9 @@ public class InvokerService {
         }
 
         /**
-         * Appends the given value as a string to the buffer. The argument is
-         * converted to a string as if by the method String.valueOf, and the
-         * characters of that string are then appended to the buffer.
+         * Appends the given value as a string to the buffer. The argument is converted to a string
+         * as if by the method String.valueOf, and the characters of that string are then appended
+         * to the buffer.
          *
          * @param longValue
          *            the long value
@@ -229,9 +230,9 @@ public class InvokerService {
         }
 
         /**
-         * Appends the given value as a string to the buffer. The argument is
-         * converted to a string as if by the method String.valueOf, and the
-         * characters of that string are then appended to the buffer.
+         * Appends the given value as a string to the buffer. The argument is converted to a string
+         * as if by the method String.valueOf, and the characters of that string are then appended
+         * to the buffer.
          *
          * @param obj
          *            the object
@@ -422,7 +423,7 @@ public class InvokerService {
          */
         public void initServerBootstrap() {
             getServerBootstrap().group(getParentGroup(), getChildGroup()).childHandler(getChannelInitializer())
-            .channel(serverChannel);
+                    .channel(serverChannel);
         }
 
         /**
@@ -556,8 +557,8 @@ public class InvokerService {
                 responseBuffer = localMainHtmlBuffer.clone();
             } else if (uriSpec[0].equalsIgnoreCase(InvokerServerHttpHandler.STATIC_PREFIX)) {
                 responseBuffer = new InvokerInfoBuffer(InvokerInfoBuffer.DOUBLE_MAX_CAPACITY);
-                responseBuffer.byteBuf.writeBytes(MetaUtil.getResourceAsBytes(
-                        URLDecoder.decode(requestUri.substring(contextPrefix.length()), "UTF-8")));
+                responseBuffer.byteBuf.writeBytes(MetaUtil
+                        .getResourceAsBytes(URLDecoder.decode(requestUri.substring(contextPrefix.length()), "UTF-8")));
             } else {
                 return defaultBuffer;
             }
@@ -567,8 +568,8 @@ public class InvokerService {
         /*
          * (non-Javadoc)
          *
-         * @see io.netty.channel.ChannelHandlerAdapter#exceptionCaught(io.netty.
-         * channel .ChannelHandlerContext, java.lang.Throwable)
+         * @see io.netty.channel.ChannelHandlerAdapter#exceptionCaught(io.netty. channel
+         * .ChannelHandlerContext, java.lang.Throwable)
          */
         @Override
         public void exceptionCaught(final ChannelHandlerContext ctx, final Throwable cause) throws Exception {
@@ -579,9 +580,8 @@ public class InvokerService {
         /*
          * (non-Javadoc)
          *
-         * @see
-         * io.netty.channel.SimpleChannelInboundHandler#channelRead0(io.netty.
-         * channel .ChannelHandlerContext, java.lang.Object)
+         * @see io.netty.channel.SimpleChannelInboundHandler#channelRead0(io.netty. channel
+         * .ChannelHandlerContext, java.lang.Object)
          */
         @Override
         public void channelRead0(final ChannelHandlerContext ctx, final FullHttpRequest request) throws Exception {
@@ -619,9 +619,7 @@ public class InvokerService {
         /*
          * (non-Javadoc)
          *
-         * @see
-         * io.netty.channel.ChannelInitializer#initChannel(io.netty.channel.
-         * Channel )
+         * @see io.netty.channel.ChannelInitializer#initChannel(io.netty.channel. Channel )
          */
         @Override
         public void initChannel(final SocketChannel channel) throws Exception {
@@ -637,6 +635,22 @@ public class InvokerService {
     public static final String SLASH = "/";
 
     private static final Object[] EMPTY_OBJECT_ARRAY = new Object[] {};
+
+    private static Instrumentation instr;
+
+    public static Instrumentation getInstr() {
+        return instr;
+    }
+
+    static {
+        try {
+            MetaUtil.extractResource(MetaUtil.class, "/instrAgent.jar", "/tmp/agent");
+            AgentLoader.loadAgent("/tmp/agent/instrAgent.jar", "");
+            instr = InstrumentationAgent.getInstrumentation();
+        } catch (final IOException e) {
+            // nothing
+        }
+    }
 
     private final Gson gson = new Gson();
 
@@ -739,26 +753,16 @@ public class InvokerService {
             nettyServerRef.initWithPort(currentPort);
             future = nettyServerRef.getServerBootstrap().bind().syncUninterruptibly();
         }
-        nettyServerRef.getChannelInitializer().getHandler().mainHtmlBuffer.appendString(
-                MetaUtil.getResourceAsString("/jin.html").replaceAll("<extjsPrefix>", extjsResourcePrefix)
-                .replaceAll("<miscjsPrefix>", miscjsResourcePrefix)
-                .replaceAll("<invokerjsPrefix>", invokerjsResourcePrefix));
-        nettyServerRef.getChannelInitializer().getHandler().localMainHtmlBuffer.appendString(MetaUtil
-                .getResourceAsString("/jin.html").replaceAll("<extjsPrefix>", "static/extjs")
-                .replaceAll("<miscjsPrefix>", "static/misc")
-                .replaceAll("<invokerjsPrefix>", "static/jin"));
+        nettyServerRef.getChannelInitializer().getHandler().mainHtmlBuffer
+                .appendString(MetaUtil.getResourceAsString("/jin.html").replaceAll("<extjsPrefix>", extjsResourcePrefix)
+                        .replaceAll("<miscjsPrefix>", miscjsResourcePrefix).replaceAll("<invokerjsPrefix>",
+                                invokerjsResourcePrefix));
+        nettyServerRef.getChannelInitializer().getHandler().localMainHtmlBuffer
+                .appendString(MetaUtil.getResourceAsString("/jin.html").replaceAll("<extjsPrefix>", "static/extjs")
+                        .replaceAll("<miscjsPrefix>", "static/misc").replaceAll("<invokerjsPrefix>", "static/jin"));
         final ChannelFuture serverFuture = future;
-        new Thread(new Runnable() {
-            /*
-             * (non-Javadoc)
-             *
-             * @see java.lang.Runnable#run()
-             */
-            @Override
-            public void run() {
-                serverFuture.channel().closeFuture().syncUninterruptibly();
-            }
-        }, InvokerService.class.getSimpleName());
+        new Thread((Runnable) () -> serverFuture.channel().closeFuture().syncUninterruptibly(),
+                InvokerService.class.getSimpleName());
         nanoServer = new SimpleWebServer("0.0.0.0", MetaUtil.availablePort(10000 + currentPort, 100), new File(SLASH),
                 true, "*");
         // nanoServer.start();
@@ -882,7 +886,8 @@ public class InvokerService {
     }
 
     /**
-     * @param miscjsResourcePrefix the miscjsResourcePrefix to set
+     * @param miscjsResourcePrefix
+     *            the miscjsResourcePrefix to set
      */
     public void setMiscjsResourcePrefix(final String miscjsResourcePrefix) {
         this.miscjsResourcePrefix = miscjsResourcePrefix;
@@ -899,9 +904,9 @@ public class InvokerService {
      * @return the singleton instance
      */
     public static InvokerService getInstance() {
-        if(service==null) {
-            synchronized(InvokerService.class) {
-                if(service==null) {
+        if (service == null) {
+            synchronized (InvokerService.class) {
+                if (service == null) {
                     service = new InvokerService();
                 }
             }
