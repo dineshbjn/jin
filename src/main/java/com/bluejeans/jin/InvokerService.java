@@ -647,8 +647,8 @@ public class InvokerService {
             MetaUtil.extractResource(MetaUtil.class, "/instrAgent.jar", "/tmp/agent");
             AgentLoader.loadAgent("/tmp/agent/instrAgent.jar", "");
             instr = InstrumentationAgent.getInstrumentation();
-        } catch (final IOException e) {
-            // nothing
+        } catch (final Throwable th) {
+            // th.printStackTrace();
         }
     }
 
