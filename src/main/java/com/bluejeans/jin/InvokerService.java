@@ -6,6 +6,7 @@ package com.bluejeans.jin;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.lang.instrument.ClassDefinition;
 import java.lang.instrument.Instrumentation;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
@@ -650,6 +651,15 @@ public class InvokerService {
         } catch (final Throwable th) {
             // th.printStackTrace();
         }
+    }
+
+    /**
+     * @param className
+     * @throws Exception
+     */
+    public static void reloadClass(final String className) throws Exception {
+        final Class<?> clazz = Class.forName(className);
+        instr.redefineClasses(new ClassDefinition(clazz, MetaUtil.fetchClassDefinitionBytes(clazz)));
     }
 
     private final Gson gson = new Gson();
