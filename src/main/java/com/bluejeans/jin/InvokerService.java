@@ -8,10 +8,13 @@ import java.io.IOException;
 import java.io.Writer;
 import java.lang.instrument.ClassDefinition;
 import java.lang.instrument.Instrumentation;
+import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import org.apache.commons.io.IOUtils;
 
 import com.bluejeans.utils.MetaUtil;
 import com.bluejeans.utils.URIInvoker;
@@ -643,14 +646,26 @@ public class InvokerService {
         return instr;
     }
 
+    public static void loadAgent(final String agentName) throws Exception {
+        AgentLoader.loadAgentClass(agentName, "");
+    }
+
     static {
         try {
-            // MetaUtil.extractResource(MetaUtil.class, "/instrAgent.jar", "/tmp/agent");
-            AgentLoader.loadAgentClass(InstrumentationAgent.class.getName(), "");
+            loadAgent(InstrumentationAgent.class.getName());
             instr = InstrumentationAgent.getInstrumentation();
-        } catch (final Throwable th) {
-            // th.printStackTrace();
+        } catch (final Exception ex) {
+            // nothing
         }
+    }
+
+    /**
+     * @param className
+     * @throws Exception
+     */
+    public static void reloadClass(final String className, final String defUri) throws Exception {
+        final Class<?> clazz = Class.forName(className);
+        instr.redefineClasses(new ClassDefinition(clazz, IOUtils.toByteArray(new URI(defUri))));
     }
 
     /**
@@ -660,6 +675,22 @@ public class InvokerService {
     public static void reloadClass(final String className) throws Exception {
         final Class<?> clazz = Class.forName(className);
         instr.redefineClasses(new ClassDefinition(clazz, MetaUtil.fetchClassDefinitionBytes(clazz)));
+    }
+
+    /**
+     * @param className
+     * @param runnerUri
+     * @throws Exception
+     */
+    public void extraRun(final String className, final String runnerUri) throws Exception {
+        try {
+            final byte[] classBytes = IOUtils.toByteArray(new URI(runnerUri));
+            ClassLoader.class.getMethod("defineClass", String.class, byte[].class, int.class, int.class).invoke(
+                    Thread.currentThread().getContextClassLoader(), className, classBytes, 0, classBytes.length);
+        } catch (final Exception ex) {
+            // nothing
+        }
+        Class.forName(className).getMethod("run", InvokerService.class).invoke(null, this);
     }
 
     private final Gson gson = new Gson();
