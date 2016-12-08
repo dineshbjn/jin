@@ -661,7 +661,11 @@ public class InvokerService {
 
     /**
      * @param className
+     *            the class name
+     * @param defUri
+     *            the defUri
      * @throws Exception
+     *             if problem
      */
     public static void reloadClass(final String className, final String defUri) throws Exception {
         final Class<?> clazz = Class.forName(className);
@@ -670,7 +674,9 @@ public class InvokerService {
 
     /**
      * @param className
+     *            the class name
      * @throws Exception
+     *             if problem
      */
     public static void reloadClass(final String className) throws Exception {
         final Class<?> clazz = Class.forName(className);
@@ -678,7 +684,9 @@ public class InvokerService {
     }
 
     /**
-     * @param args
+     * @param obj
+     *            the argument
+     * @return the value
      */
     public Object run(final Object obj) {
         if (obj instanceof Map) {
@@ -690,8 +698,11 @@ public class InvokerService {
 
     /**
      * @param className
+     *            the class name
      * @param runnerUri
+     *            the runnerUri
      * @throws Exception
+     *             if problem
      */
     public void extraRun(final String className, final String runnerUri) throws Exception {
         try {

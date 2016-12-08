@@ -130,7 +130,7 @@ public class InvokerSpringBean implements ApplicationContextAware {
     }
 
     /**
-     * @return
+     * @return the extjsResourcePrefix
      * @see com.bluejeans.jin.InvokerService#getExtjsResourcePrefix()
      */
     public String getExtjsResourcePrefix() {
@@ -139,6 +139,7 @@ public class InvokerSpringBean implements ApplicationContextAware {
 
     /**
      * @param extjsResourcePrefix
+     *            to set
      * @see com.bluejeans.jin.InvokerService#setExtjsResourcePrefix(java.lang.String)
      */
     public void setExtjsResourcePrefix(final String extjsResourcePrefix) {
@@ -146,7 +147,7 @@ public class InvokerSpringBean implements ApplicationContextAware {
     }
 
     /**
-     * @return
+     * @return the invokerjsResourcePrefix
      * @see com.bluejeans.jin.InvokerService#getInvokerjsResourcePrefix()
      */
     public String getInvokerjsResourcePrefix() {
@@ -155,6 +156,7 @@ public class InvokerSpringBean implements ApplicationContextAware {
 
     /**
      * @param invokerjsResourcePrefix
+     *            to set
      * @see com.bluejeans.jin.InvokerService#setInvokerjsResourcePrefix(java.lang.String)
      */
     public void setInvokerjsResourcePrefix(final String invokerjsResourcePrefix) {
@@ -162,7 +164,7 @@ public class InvokerSpringBean implements ApplicationContextAware {
     }
 
     /**
-     * @return miscjsResourcePrefix
+     * @return the miscjsResourcePrefix
      * @see com.bluejeans.jin.InvokerService#getMiscjsResourcePrefix()
      */
     public String getMiscjsResourcePrefix() {
@@ -171,6 +173,7 @@ public class InvokerSpringBean implements ApplicationContextAware {
 
     /**
      * @param miscjsResourcePrefix
+     *            to set
      * @see com.bluejeans.jin.InvokerService#setMiscjsResourcePrefix(java.lang.String)
      */
     public void setMiscjsResourcePrefix(final String miscjsResourcePrefix) {
