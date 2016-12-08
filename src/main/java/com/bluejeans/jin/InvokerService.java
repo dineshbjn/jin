@@ -678,6 +678,17 @@ public class InvokerService {
     }
 
     /**
+     * @param args
+     */
+    public Object run(final Object obj) {
+        if (obj instanceof Map) {
+            return ((Map<?, ?>) obj).values();
+        } else {
+            return obj;
+        }
+    }
+
+    /**
      * @param className
      * @param runnerUri
      * @throws Exception
