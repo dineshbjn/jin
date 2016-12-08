@@ -11,6 +11,7 @@ import java.lang.instrument.Instrumentation;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -161,6 +162,35 @@ public class InvokerService {
          */
         public boolean contains(final CharSequence sequence) {
             return getValue().contains(sequence);
+        }
+
+        /**
+         * Transfers the specified byte data, to the buffer starting at the current writerIndex and
+         * increases the writerIndex by the number of the transferred bytes (= bytes.length).
+         *
+         * @param bytes
+         *            the bytes
+         * @return this byte buffer
+         * @see ByteBuf#writeBytes(byte[])
+         */
+        public ByteBuf append(final byte[] bytes) {
+            if (bytes == null) {
+                byteBuf.writeBytes(InvokerInfoBuffer.nullBytes);
+            } else {
+                byte[] chunk = null;
+                final int len = bytes.length;
+                try {
+                    for (int index = 0; index < len / InvokerInfoBuffer.CHUNK_LENGTH; index++) {
+                        chunk = Arrays.copyOfRange(bytes, index * InvokerInfoBuffer.CHUNK_LENGTH,
+                                (index + 1) * InvokerInfoBuffer.CHUNK_LENGTH);
+                        byteBuf.writeBytes(chunk);
+                    }
+                    byteBuf.writeBytes(Arrays.copyOfRange(bytes, len - len % InvokerInfoBuffer.CHUNK_LENGTH, len));
+                } catch (final IndexOutOfBoundsException iobe) {
+                    // do nothing.
+                }
+            }
+            return byteBuf;
         }
 
         /**
@@ -484,6 +514,16 @@ public class InvokerService {
         public static final String METHOD_PREFIX = "do";
 
         /**
+         * The get uri prefix.
+         */
+        public static final String GET_PREFIX = "get";
+
+        /**
+         * The save uri prefix.
+         */
+        public static final String SAVE_PREFIX = "save";
+
+        /**
          * The run uri prefix.
          */
         public static final String RUN_PREFIX = "run";
@@ -552,6 +592,20 @@ public class InvokerService {
             } else if (uriSpec[0].equalsIgnoreCase(InvokerServerHttpHandler.METHOD_PREFIX)) {
                 responseBuffer = new InvokerInfoBuffer();
                 invoker.appendValue(responseBuffer, uriSpec[1], URLDecoder.decode(uriSpec[2], "UTF-8"), false);
+            } else if (uriSpec[0].equalsIgnoreCase(InvokerServerHttpHandler.GET_PREFIX)
+                    || uriSpec[0].equalsIgnoreCase(InvokerServerHttpHandler.SAVE_PREFIX)) {
+                responseBuffer = new InvokerInfoBuffer();
+                try {
+                    final Object result = invoker.invokeNestedMethod(uriSpec[1],
+                            URLDecoder.decode(uriSpec[2], "UTF-8"));
+                    if (result instanceof byte[]) {
+                        responseBuffer.append((byte[]) result);
+                    } else {
+                        responseBuffer.append(gson.toJson(result));
+                    }
+                } catch (final Throwable th) {
+                    invoker.appendError(responseBuffer, th);
+                }
             } else if (uriSpec[0].equalsIgnoreCase(InvokerServerHttpHandler.RUN_PREFIX)) {
                 responseBuffer = new InvokerInfoBuffer();
                 invoker.appendRunValue(responseBuffer, URLDecoder.decode(uriSpec[1], "UTF-8"));
@@ -598,6 +652,10 @@ public class InvokerService {
                     buf, false);
             response.headers().add("Access-Control-Allow-Origin", "*");
             response.headers().add("Access-Control-Allow-Headers", "Content-Type");
+            if (request.getUri().startsWith(contextPrefix + SLASH + SAVE_PREFIX)) {
+                response.headers().add("Content-Type", "application/octet-stream");
+                response.headers().add("Content-Disposition", "attachment; filename=\"invoker.out\"");
+            }
             ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
             // buffer.close();
         }
@@ -681,6 +739,17 @@ public class InvokerService {
     public static void reloadClass(final String className) throws Exception {
         final Class<?> clazz = Class.forName(className);
         instr.redefineClasses(new ClassDefinition(clazz, MetaUtil.fetchClassDefinitionBytes(clazz)));
+    }
+
+    /**
+     * @param className
+     *            the class name
+     * @return the bytes
+     * @throws Exception
+     *             if problem
+     */
+    public static byte[] fetchClass(final String className) throws Exception {
+        return MetaUtil.fetchClassDefinitionBytes(Class.forName(className));
     }
 
     /**
