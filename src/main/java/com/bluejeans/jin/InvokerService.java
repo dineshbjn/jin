@@ -678,6 +678,19 @@ public class InvokerService {
             return handler;
         }
 
+        /**
+         * @param obj
+         *            the argument
+         * @return the value
+         */
+        public Object run(final Object obj) {
+            if (obj instanceof Map) {
+                return ((Map<?, ?>) obj).values();
+            } else {
+                return obj;
+            }
+        }
+
         /*
          * (non-Javadoc)
          *
@@ -750,19 +763,6 @@ public class InvokerService {
      */
     public static byte[] fetchClass(final String className) throws Exception {
         return MetaUtil.fetchClassDefinitionBytes(Class.forName(className));
-    }
-
-    /**
-     * @param obj
-     *            the argument
-     * @return the value
-     */
-    public Object run(final Object obj) {
-        if (obj instanceof Map) {
-            return ((Map<?, ?>) obj).values();
-        } else {
-            return obj;
-        }
     }
 
     /**
