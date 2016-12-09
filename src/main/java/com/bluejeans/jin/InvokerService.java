@@ -751,7 +751,7 @@ public class InvokerService {
      */
     public static void reloadClass(final String className) throws Exception {
         final Class<?> clazz = Class.forName(className);
-        instr.redefineClasses(new ClassDefinition(clazz, MetaUtil.fetchClassDefinitionBytes(clazz)));
+        instr.redefineClasses(new ClassDefinition(clazz, MetaUtil.fetchClassDefinitionBytes(clazz, clazz)));
     }
 
     /**

@@ -13,7 +13,7 @@ public class InvokerTest {
     /**
      * @param args
      */
-    public static void main(final String[] args) {
+    public static void main(final String[] args) throws Exception {
         final InvokerSpringBean invoker = new InvokerSpringBean();
         // invoker.setContextPrefix("test");
         invoker.getService().getInvoker().setTarget(new StringBuffer("again"));
