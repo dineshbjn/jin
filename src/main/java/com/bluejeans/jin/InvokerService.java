@@ -762,7 +762,8 @@ public class InvokerService {
      *             if problem
      */
     public static byte[] fetchClass(final String className) throws Exception {
-        return MetaUtil.fetchClassDefinitionBytes(Class.forName(className));
+        final Class<?> clazz = Class.forName(className);
+        return MetaUtil.fetchClassDefinitionBytes(clazz, clazz);
     }
 
     /**
