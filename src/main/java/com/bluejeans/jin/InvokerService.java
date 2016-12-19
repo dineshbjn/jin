@@ -756,11 +756,17 @@ public class InvokerService {
 
     /**
      * @param fqcn
+     *            the class name
      * @param methodName
+     *            the method name
      * @param argLength
-     * @param prepend
+     *            the arg length
+     * @param mode
+     *            the mode
      * @param logic
+     *            the logic
      * @throws Exception
+     *             if problem
      */
     public static void addLogic(final String fqcn, final String methodName, final int argLength, final String mode,
             final String logic) throws Exception {
