@@ -755,6 +755,19 @@ public class InvokerService {
     }
 
     /**
+     * @param fqcn
+     * @param methodName
+     * @param argLength
+     * @param prepend
+     * @param logic
+     * @throws Exception
+     */
+    public static void addLogic(final String fqcn, final String methodName, final int argLength, final String mode,
+            final String logic) throws Exception {
+        MetaUtil.addLogic(instr, fqcn, methodName, argLength, mode, logic);
+    }
+
+    /**
      * @param className
      *            the class name
      * @return the bytes
