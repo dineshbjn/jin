@@ -4,6 +4,7 @@
 package com.bluejeans.jin;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Writer;
 import java.lang.instrument.ClassDefinition;
@@ -12,9 +13,11 @@ import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import com.bluejeans.utils.MetaUtil;
@@ -783,6 +786,25 @@ public class InvokerService {
     public static byte[] fetchClass(final String className) throws Exception {
         final Class<?> clazz = Class.forName(className);
         return MetaUtil.fetchClassDefinitionBytes(clazz, clazz);
+    }
+
+    /**
+     * @param packageName
+     *            the package
+     * @return the jar bytes
+     * @throws Exception
+     *             if problem
+     */
+    public static synchronized byte[] fetchPackage(final String packageName) throws Exception {
+        final List<Class<?>> classes = MetaUtil.getClasses(packageName);
+        if (classes.isEmpty()) {
+            return new byte[0];
+        } else {
+            FileUtils.deleteDirectory(new File(System.getProperty("java.io.tmpdir") + "/tmp/java/classes"));
+            return IOUtils.toByteArray(new FileInputStream(MetaUtil.createJarFromClasses(classes.get(0),
+                    System.getProperty("java.io.tmpdir") + "/tmp/java/classes", packageName + "_classes", null,
+                    classes)));
+        }
     }
 
     /**

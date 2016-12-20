@@ -14,6 +14,7 @@ public class InvokerTest {
      * @param args
      */
     public static void main(final String[] args) throws Exception {
+        System.err.println(System.getProperty("java.io.tmpdir"));
         final InvokerSpringBean invoker = new InvokerSpringBean();
         // invoker.setContextPrefix("test");
         invoker.getService().getInvoker().setTarget(new StringBuilder("again"));
