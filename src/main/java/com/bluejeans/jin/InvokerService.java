@@ -771,7 +771,7 @@ public class InvokerService {
      * @throws Exception
      *             if problem
      */
-    public static void addLogic(final String fqcn, final String methodName, final int argLength, final String mode,
+    public static void addLogic(final String fqcn, final String methodName, final String argLength, final String mode,
             final String logic) throws Exception {
         MetaUtil.addLogic(instr, fqcn, methodName, argLength, mode, logic);
     }
