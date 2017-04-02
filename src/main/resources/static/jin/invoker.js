@@ -1009,7 +1009,7 @@ Ext.onReady(function() {
 					text : value,
 					uri : Ext.getCmp("uri_").getValue(),
 					id : fieldId,
-					style : 'font: normal 30px arial;width:200px',
+					style : 'font: normal 30px arial;width:250px',
 					padding : 10
 
 				}, {
