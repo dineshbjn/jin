@@ -976,7 +976,7 @@ Ext.onReady(function() {
 	}, {
 		xtype : 'textfield',
 		id : 'uri_',
-		style : 'width:200px',
+		style : 'width:250px',
 		margin : 5
 	}, {
 		xtype : 'button',
