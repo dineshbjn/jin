@@ -728,7 +728,7 @@ public class InvokerService {
         try {
             loadAgent(InstrumentationAgent.class.getName());
             instr = InstrumentationAgent.getInstrumentation();
-        } catch (final Exception ex) {
+        } catch (final Throwable th) {
             // nothing
         }
     }
@@ -840,6 +840,8 @@ public class InvokerService {
 
     private SimpleWebServer nanoServer;
 
+    private String mainJsName = "invoker";
+
     private String extjsResourcePrefix = "https://cdn.rawgit.com/bluejeansnet/jin/master/src/main/resources/static/extjs";
 
     private String miscjsResourcePrefix = "https://cdn.rawgit.com/bluejeansnet/jin/master/src/main/resources/static/misc";
@@ -927,13 +929,14 @@ public class InvokerService {
             nettyServerRef.initWithPort(currentPort);
             future = nettyServerRef.getServerBootstrap().bind().syncUninterruptibly();
         }
-        nettyServerRef.getChannelInitializer().getHandler().mainHtmlBuffer
-                .appendString(MetaUtil.getResourceAsString("/jin.html").replaceAll("<extjsPrefix>", extjsResourcePrefix)
-                        .replaceAll("<miscjsPrefix>", miscjsResourcePrefix).replaceAll("<invokerjsPrefix>",
-                                invokerjsResourcePrefix));
+        nettyServerRef.getChannelInitializer().getHandler().mainHtmlBuffer.appendString(MetaUtil
+                .getResourceAsString("/jin.html").replaceAll("<mainJsName>", mainJsName)
+                .replaceAll("<extjsPrefix>", extjsResourcePrefix).replaceAll("<miscjsPrefix>", miscjsResourcePrefix)
+                .replaceAll("<invokerjsPrefix>", invokerjsResourcePrefix));
         nettyServerRef.getChannelInitializer().getHandler().localMainHtmlBuffer
-                .appendString(MetaUtil.getResourceAsString("/jin.html").replaceAll("<extjsPrefix>", "static/extjs")
-                        .replaceAll("<miscjsPrefix>", "static/misc").replaceAll("<invokerjsPrefix>", "static/jin"));
+                .appendString(MetaUtil.getResourceAsString("/jin.html").replaceAll("<mainJsName>", mainJsName)
+                        .replaceAll("<extjsPrefix>", "static/extjs").replaceAll("<miscjsPrefix>", "static/misc")
+                        .replaceAll("<invokerjsPrefix>", "static/jin"));
         final ChannelFuture serverFuture = future;
         new Thread((Runnable) () -> serverFuture.channel().closeFuture().syncUninterruptibly(),
                 InvokerService.class.getSimpleName());
@@ -1065,6 +1068,21 @@ public class InvokerService {
      */
     public void setMiscjsResourcePrefix(final String miscjsResourcePrefix) {
         this.miscjsResourcePrefix = miscjsResourcePrefix;
+    }
+
+    /**
+     * @return the mainJsName
+     */
+    public String getMainJsName() {
+        return mainJsName;
+    }
+
+    /**
+     * @param mainJsName
+     *            the mainJsName to set
+     */
+    public void setMainJsName(final String mainJsName) {
+        this.mainJsName = mainJsName;
     }
 
     /**
