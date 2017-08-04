@@ -39,7 +39,7 @@ if (dev) {
 	cluster = true;
 }
 var currLocation = location.toString();
-var hostPrefix = currLocation.substring(0, currLocation.split('://')[0].length + currLocation.split('://')[1].indexOf('/') + 4);
+var hostPrefix = currLocation.substring(0, currLocation.split('://')[0].length + currLocation.split('://')[1].lastIndexOf('/') + 4);
 document.title = 'JIN - ' + 'Java Inspector' + ' - ' + host;
 var idCounter = 0;
 var leafTypes = [ "java.lang.String", "java.lang.Double", "java.lang.Float",
