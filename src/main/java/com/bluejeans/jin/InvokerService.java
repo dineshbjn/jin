@@ -724,13 +724,16 @@ public class InvokerService {
         AgentLoader.loadAgentClass(agentName, "");
     }
 
-    static {
-        try {
-            loadAgent(InstrumentationAgent.class.getName());
-            instr = InstrumentationAgent.getInstrumentation();
-        } catch (final Throwable th) {
-            // nothing
+    public static Instrumentation initInstr(final Instrumentation defaultInstr) {
+        if (instr == null) {
+            try {
+                loadAgent(InstrumentationAgent.class.getName());
+                instr = InstrumentationAgent.getInstrumentation();
+            } catch (final Throwable th) {
+                instr = defaultInstr;
+            }
         }
+        return instr;
     }
 
     /**
