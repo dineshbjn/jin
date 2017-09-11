@@ -3,6 +3,8 @@
  */
 package com.bluejeans.jin;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
@@ -178,6 +180,38 @@ public class InvokerSpringBean implements ApplicationContextAware {
      */
     public void setMiscjsResourcePrefix(final String miscjsResourcePrefix) {
         service.setMiscjsResourcePrefix(miscjsResourcePrefix);
+    }
+
+    /**
+     * @return
+     * @see com.bluejeans.jin.InvokerService#getUriWhitelist()
+     */
+    public List<String> getUriWhitelist() {
+        return service.getUriWhitelist();
+    }
+
+    /**
+     * @param uriWhitelist
+     * @see com.bluejeans.jin.InvokerService#setUriWhitelist(java.util.List)
+     */
+    public void setUriWhitelist(final List<String> uriWhitelist) {
+        service.setUriWhitelist(uriWhitelist);
+    }
+
+    /**
+     * @return
+     * @see com.bluejeans.jin.InvokerService#getUriBlacklist()
+     */
+    public List<String> getUriBlacklist() {
+        return service.getUriBlacklist();
+    }
+
+    /**
+     * @param uriBlacklist
+     * @see com.bluejeans.jin.InvokerService#setUriBlacklist(java.util.List)
+     */
+    public void setUriBlacklist(final List<String> uriBlacklist) {
+        service.setUriBlacklist(uriBlacklist);
     }
 
 }

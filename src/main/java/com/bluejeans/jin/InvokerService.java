@@ -12,10 +12,13 @@ import java.lang.instrument.Instrumentation;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -587,7 +590,21 @@ public class InvokerService {
             if (!requestUri.startsWith(contextPrefix)) {
                 return defaultBuffer;
             }
-            final String[] uriSpec = requestUri.substring(contextPrefix.length() + 1).split(SLASH, 3);
+            final String uri = requestUri.substring(contextPrefix.length() + 1);
+            // match uri
+            boolean status = false;
+            if (!uriWhitePatterns.isEmpty()) {
+                status = uriWhitePatterns.stream().anyMatch(p -> p.matcher(uri).matches());
+            } else {
+                status = true;
+            }
+            if (status && !uriBlackPatterns.isEmpty()) {
+                status &= uriBlackPatterns.stream().allMatch(p -> !p.matcher(uri).matches());
+            }
+            if (!status) {
+                return defaultBuffer;
+            }
+            final String[] uriSpec = uri.split(SLASH, 3);
             InvokerInfoBuffer responseBuffer = null;
             if (uriSpec[0].equalsIgnoreCase(InvokerServerHttpHandler.VALUE_PREFIX)) {
                 responseBuffer = new InvokerInfoBuffer();
@@ -651,8 +668,8 @@ public class InvokerService {
             if (request.getMethod().compareTo(HttpMethod.OPTIONS) != 0) {
                 buf = processRequest(request).byteBuf;
             }
-            final FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK,
-                    buf, false);
+            final FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1,
+                    buf == defaultBuffer.byteBuf ? HttpResponseStatus.NOT_FOUND : HttpResponseStatus.OK, buf, false);
             response.headers().add("Access-Control-Allow-Origin", "*");
             response.headers().add("Access-Control-Allow-Headers", "Content-Type");
             if (request.getUri().startsWith(contextPrefix + SLASH + SAVE_PREFIX)) {
@@ -734,6 +751,10 @@ public class InvokerService {
             }
         }
         return instr;
+    }
+
+    static {
+        initInstr(null);
     }
 
     /**
@@ -845,6 +866,14 @@ public class InvokerService {
 
     private String mainJsName = "invoker";
 
+    private List<String> uriWhitelist;
+
+    private List<String> uriBlacklist;
+
+    private List<Pattern> uriWhitePatterns;
+
+    private List<Pattern> uriBlackPatterns;
+
     private String extjsResourcePrefix = "https://cdn.rawgit.com/bluejeansnet/jin/master/src/main/resources/static/extjs";
 
     private String miscjsResourcePrefix = "https://cdn.rawgit.com/bluejeansnet/jin/master/src/main/resources/static/misc";
@@ -918,6 +947,16 @@ public class InvokerService {
             this.contextPrefix = contextPrefix.trim();
         } else {
             this.contextPrefix = SLASH + contextPrefix.trim();
+        }
+        if (uriWhitelist != null) {
+            uriWhitePatterns = uriWhitelist.stream().map(p -> Pattern.compile(p)).collect(Collectors.toList());
+        } else {
+            uriWhitePatterns = new ArrayList<>();
+        }
+        if (uriBlacklist != null) {
+            uriBlackPatterns = uriBlacklist.stream().map(p -> Pattern.compile(p)).collect(Collectors.toList());
+        } else {
+            uriBlackPatterns = new ArrayList<>();
         }
         // Initialize Netty.
         ChannelFuture future = null;
@@ -1026,6 +1065,36 @@ public class InvokerService {
      */
     public boolean isRunning() {
         return running;
+    }
+
+    /**
+     * @return the uriWhitelist
+     */
+    public List<String> getUriWhitelist() {
+        return uriWhitelist;
+    }
+
+    /**
+     * @param uriWhitelist
+     *            the uriWhitelist to set
+     */
+    public void setUriWhitelist(final List<String> uriWhitelist) {
+        this.uriWhitelist = uriWhitelist;
+    }
+
+    /**
+     * @return the uriBlacklist
+     */
+    public List<String> getUriBlacklist() {
+        return uriBlacklist;
+    }
+
+    /**
+     * @param uriBlacklist
+     *            the uriBlacklist to set
+     */
+    public void setUriBlacklist(final List<String> uriBlacklist) {
+        this.uriBlacklist = uriBlacklist;
     }
 
     /**
