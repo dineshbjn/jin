@@ -874,11 +874,11 @@ public class InvokerService {
 
     private List<Pattern> uriBlackPatterns;
 
-    private String extjsResourcePrefix = "https://cdn.rawgit.com/bluejeansnet/jin/master/src/main/resources/static/extjs";
+    private String extjsResourcePrefix = "https://cdn.jsdelivr.net/gh/dineshbjn/jin@master/src/main/resources/static/extjs";
 
-    private String miscjsResourcePrefix = "https://cdn.rawgit.com/bluejeansnet/jin/master/src/main/resources/static/misc";
+    private String miscjsResourcePrefix = "https://cdn.jsdelivr.net/gh/dineshbjn/jin@master/src/main/resources/static/misc";
 
-    private String invokerjsResourcePrefix = "https://rawgit.com/bluejeansnet/jin/master/src/main/resources/static/jin";
+    private String invokerjsResourcePrefix = "https://cdn.jsdelivr.net/gh/dineshbjn/jin@master/src/main/resources/static/jin";
 
     private volatile boolean running;
 
@@ -1204,8 +1204,8 @@ public class InvokerService {
         if (args.length > 1) {
             context = args[1];
         }
-        InvokerService.service.setPort(port);
-        InvokerService.service.start(context);
+        InvokerService.getInstance().setPort(port);
+        InvokerService.getInstance().start(context);
     }
 
 }
