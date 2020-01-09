@@ -544,7 +544,7 @@ function getObject(path, meta, callback) {
 			}
 			fieldMap[name] = new Date();
 			var isLeaf = Ext.Array.contains(leafTypes, type);
-			if (name != '')
+			if (name != '' && type != 'java.lang.reflect.Method')
 				if (isLeaf) {
 					getDataAsync(hostPrefix + path + "..$" + name, {
 						name : name + "",
