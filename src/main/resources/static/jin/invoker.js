@@ -380,8 +380,8 @@ function getObject(path, meta, callback) {
 				if (context.name != '')
 					callback({
 						text : context.name + " : "
-								+ type.substring(type.lastIndexOf(".") + 1),
-						type : type,
+								+ type.indexOf('{"error":') == 0 ? '!Error' : type.substring(type.lastIndexOf(".") + 1),
+						type : type.indexOf('{"error":') == 0 ? '!Error' : type,
 						leaf : isLeaf,
 						uri : context.objPath + "..getValue~~" + context.name,
 						qtip : context.objPath.substring(context.objPath
@@ -412,8 +412,8 @@ function getObject(path, meta, callback) {
 				if (context.name != '')
 					callback({
 						text : context.name + " : "
-								+ type.substring(type.lastIndexOf(".") + 1),
-						type : type,
+								+ type.indexOf('{"error":') == 0 ? '!Error' : type.substring(type.lastIndexOf(".") + 1),
+						type : type.indexOf('{"error":') == 0 ? '!Error' : type,
 						leaf : isLeaf,
 						uri : context.objPath + "..~" + context.name,
 						qtip : context.objPath.substring(context.objPath
@@ -447,8 +447,8 @@ function getObject(path, meta, callback) {
 					var isLeaf = Ext.Array.contains(leafTypes, type);
 					callback({
 						text : context.name + " : "
-								+ type.substring(type.lastIndexOf(".") + 1),
-						type : type,
+								+ type.indexOf('{"error":') == 0 ? '!Error' : type.substring(type.lastIndexOf(".") + 1),
+						type : type.indexOf('{"error":') == 0 ? '!Error' : type,
 						leaf : isLeaf,
 						uri : context.objPath + "..~" + context.name,
 						qtip : context.objPath.substring(context.objPath
@@ -483,8 +483,8 @@ function getObject(path, meta, callback) {
 					var isLeaf = Ext.Array.contains(leafTypes, type);
 					callback({
 						text : context.name + " : "
-								+ type.substring(type.lastIndexOf(".") + 1),
-						type : type,
+								+ type.indexOf('{"error":') == 0 ? '!Error' : type.substring(type.lastIndexOf(".") + 1),
+						type : type.indexOf('{"error":') == 0 ? '!Error' : type,
 						leaf : isLeaf,
 						uri : context.path + "..~" + context.name,
 						qtip : context.path.substring(context.path
@@ -715,10 +715,10 @@ function populateRoot() {
 							{
 								text : context.beanElement
 										+ " : "
-										+ type
+										+ type.indexOf('{"error":') == 0 ? '!Error' : type
 												.substring(type
 														.lastIndexOf(".") + 1),
-								type : type,
+								type : type.indexOf('{"error":') == 0 ? '!Error' : type,
 								leaf : isLeaf,
 								uri : context.springPrefix + "..getBean~~"
 										+ context.beanElement,
@@ -751,10 +751,10 @@ function populateRoot() {
 							{
 								text : context.beanElement
 										+ " : "
-										+ type
+										+ type.indexOf('{"error":') == 0 ? '!Error' : type
 												.substring(type
 														.lastIndexOf(".") + 1),
-								type : type,
+								type : type.indexOf('{"error":') == 0 ? '!Error' : type,
 								leaf : isLeaf,
 								uri : context.springPrefix
 										+ "..getParent..getBean~~"
@@ -786,9 +786,9 @@ function populateRoot() {
 								{
 									text : context.targetElement
 											+ " : "
-											+ type.substring(type
+											+ type.indexOf('{"error":') == 0 ? '!Error' : type.substring(type
 													.lastIndexOf(".") + 1),
-									type : type,
+									type : type.indexOf('{"error":') == 0 ? '!Error' : type,
 									leaf : false,
 									uri : context.targetPrefix + "..get~~"
 											+ context.targetElement,
