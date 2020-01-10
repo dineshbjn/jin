@@ -496,6 +496,7 @@ function getObject(path, meta, callback) {
 		}
 
 	} else {
+		var done = false;
 		var allInterfaces = getData(hostPrefix + path + ".._interfaces");
 		var interfaces = allInterfaces.split('\n');
 		for (var i = 0; i < interfaces.length; i++) {
@@ -517,6 +518,7 @@ function getObject(path, meta, callback) {
 						uri : path + ".._mapData"
 					});
 				}
+				done = true;
 				break;
 			}
 			if (interfaces[i].indexOf("java.util.List") > 0) {
@@ -526,10 +528,13 @@ function getObject(path, meta, callback) {
 					leaf : false,
 					uri : path + ".._listData"
 				});
+				done = true;
 				break;
 			}
 		}
-
+		if(done) {
+			return;
+		}
 		var resp = getData(hostPrefix + path + ".._fields");
 		var elements = resp.split('\n');
 		var fieldMap = {};
