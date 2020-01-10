@@ -409,7 +409,7 @@ function getObject(path, meta, callback) {
 				if (type == "void")
 					return;
 				var isLeaf = Ext.Array.contains(leafTypes, type);
-				if (context.name != '')
+				if (context.name != '' && type.indexOf('{"error":') != 0)
 					callback({
 						text : context.name + " : "
 								+ (type.indexOf('{"error":') == 0 ? '!Error' : type.substring(type.lastIndexOf(".") + 1)),
@@ -442,7 +442,7 @@ function getObject(path, meta, callback) {
 						+ "..getClass..getName", context, function(resp,
 						context) {
 					var type = resp.responseText;
-					if (type == "void")
+					if (type == "void" || type.indexOf('{"error":') == 0)
 						return;
 					var isLeaf = Ext.Array.contains(leafTypes, type);
 					callback({
@@ -480,6 +480,8 @@ function getObject(path, meta, callback) {
 						+ "..getClass..getName", context, function(resp,
 						context) {
 					var type = resp.responseText;
+					if (type == "void" || type.indexOf('{"error":') == 0)
+						return;
 					var isLeaf = Ext.Array.contains(leafTypes, type);
 					callback({
 						text : context.name + " : "
@@ -599,7 +601,7 @@ function getObject(path, meta, callback) {
 			var element = elements[i];
 			var temparr = element.split(" ");
 			var type = temparr[temparr.length - 2];
-			if (type == "void")
+			if (type == "void" || type.indexOf('{"error":') == 0)
 				continue;
 			var name = temparr[temparr.length - 1];
 			if (name.indexOf("java.lang.Object") == 0
@@ -785,6 +787,9 @@ function populateRoot() {
 				targetPrefix : targetPrefix
 			}, function(resp, context) {
 				var type = resp.responseText;
+				if(type.indexOf('{"error":') == 0) {
+					continue;
+				}
 				var isLeaf = Ext.Array.contains(leafTypes, type);
 				store.getRootNode()
 						.appendChild(
