@@ -28,6 +28,7 @@ import com.bluejeans.utils.URIInvoker;
 import com.bluejeans.utils.javaagent.InstrumentationAgent;
 import com.ea.agentloader.AgentLoader;
 import com.google.gson.Gson;
+import py4j.GatewayServer;
 
 import fi.iki.elonen.SimpleWebServer;
 import io.netty.bootstrap.ServerBootstrap;
@@ -1206,6 +1207,17 @@ public class InvokerService {
         }
         InvokerService.getInstance().setPort(port);
         InvokerService.getInstance().start(context);
+        if (args.length > 2 && args[2].equals("py4j")) {
+            if(args.length > 3) {
+                int count = Integer.parseInt(args[3]);
+                for (int i=0; i < count; i++) {
+                    new GatewayServer(InvokerService.getInstance(), 7000 + i, 7100 + i, 
+                        GatewayServer.DEFAULT_CONNECT_TIMEOUT, GatewayServer.DEFAULT_READ_TIMEOUT, null).start();
+                }
+            } else {
+                new GatewayServer(InvokerService.getInstance()).start();
+            }
+        }
     }
 
 }
