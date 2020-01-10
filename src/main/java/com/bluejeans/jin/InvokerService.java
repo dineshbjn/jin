@@ -879,7 +879,7 @@ public class InvokerService {
 
     private String miscjsResourcePrefix = "https://cdn.jsdelivr.net/gh/dineshbjn/jin@master/src/main/resources/static/misc";
 
-    private String invokerjsResourcePrefix = "https://cdn.jsdelivr.net/gh/dineshbjn/jin@master/src/main/resources/static/jin";
+    private String invokerjsResourcePrefix = "https://raw.githack.com/dineshbjn/jin/master/src/main/resources/static/jin";
 
     private volatile boolean running;
 

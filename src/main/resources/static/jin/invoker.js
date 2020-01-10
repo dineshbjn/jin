@@ -311,11 +311,11 @@ var graphPanel = Ext.create("Ext.form.Panel", {
 	border : false
 });
 
-function getJins() {
+function getJins(count) {
 	var jins = [];
 	if (port == "")
 		return jins;
-	for (var i = 0; i < 20; i++) {
+	for (var i = 0; i < count; i++) {
 		var currPort = 5678 + i;
 		var prefix = 'http://' + host + ':' + currPort + '/';
 		var title = '';
@@ -334,7 +334,7 @@ function getJins() {
 	return jins;
 }
 
-var jins = getJins();
+var jins = getJins(1);
 
 var jinCombo = {
 	xtype : 'combo',
