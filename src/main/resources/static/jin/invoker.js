@@ -380,7 +380,7 @@ function getObject(path, meta, callback) {
 				if (context.name != '')
 					callback({
 						text : context.name + " : "
-								+ type.indexOf('{"error":') == 0 ? '!Error' : type.substring(type.lastIndexOf(".") + 1),
+								+ (type.indexOf('{"error":') == 0 ? '!Error' : type.substring(type.lastIndexOf(".") + 1)),
 						type : type.indexOf('{"error":') == 0 ? '!Error' : type,
 						leaf : isLeaf,
 						uri : context.objPath + "..getValue~~" + context.name,
@@ -412,7 +412,7 @@ function getObject(path, meta, callback) {
 				if (context.name != '')
 					callback({
 						text : context.name + " : "
-								+ type.indexOf('{"error":') == 0 ? '!Error' : type.substring(type.lastIndexOf(".") + 1),
+								+ (type.indexOf('{"error":') == 0 ? '!Error' : type.substring(type.lastIndexOf(".") + 1)),
 						type : type.indexOf('{"error":') == 0 ? '!Error' : type,
 						leaf : isLeaf,
 						uri : context.objPath + "..~" + context.name,
@@ -447,7 +447,7 @@ function getObject(path, meta, callback) {
 					var isLeaf = Ext.Array.contains(leafTypes, type);
 					callback({
 						text : context.name + " : "
-								+ type.indexOf('{"error":') == 0 ? '!Error' : type.substring(type.lastIndexOf(".") + 1),
+								+ (type.indexOf('{"error":') == 0 ? '!Error' : type.substring(type.lastIndexOf(".") + 1)),
 						type : type.indexOf('{"error":') == 0 ? '!Error' : type,
 						leaf : isLeaf,
 						uri : context.objPath + "..~" + context.name,
@@ -483,7 +483,7 @@ function getObject(path, meta, callback) {
 					var isLeaf = Ext.Array.contains(leafTypes, type);
 					callback({
 						text : context.name + " : "
-								+ type.indexOf('{"error":') == 0 ? '!Error' : type.substring(type.lastIndexOf(".") + 1),
+								+ (type.indexOf('{"error":') == 0 ? '!Error' : type.substring(type.lastIndexOf(".") + 1)),
 						type : type.indexOf('{"error":') == 0 ? '!Error' : type,
 						leaf : isLeaf,
 						uri : context.path + "..~" + context.name,
@@ -715,9 +715,9 @@ function populateRoot() {
 							{
 								text : context.beanElement
 										+ " : "
-										+ type.indexOf('{"error":') == 0 ? '!Error' : type
+										+ (type.indexOf('{"error":') == 0 ? '!Error' : type
 												.substring(type
-														.lastIndexOf(".") + 1),
+														.lastIndexOf(".") + 1)),
 								type : type.indexOf('{"error":') == 0 ? '!Error' : type,
 								leaf : isLeaf,
 								uri : context.springPrefix + "..getBean~~"
@@ -751,9 +751,9 @@ function populateRoot() {
 							{
 								text : context.beanElement
 										+ " : "
-										+ type.indexOf('{"error":') == 0 ? '!Error' : type
+										+ (type.indexOf('{"error":') == 0 ? '!Error' : type
 												.substring(type
-														.lastIndexOf(".") + 1),
+														.lastIndexOf(".") + 1)),
 								type : type.indexOf('{"error":') == 0 ? '!Error' : type,
 								leaf : isLeaf,
 								uri : context.springPrefix
@@ -786,8 +786,8 @@ function populateRoot() {
 								{
 									text : context.targetElement
 											+ " : "
-											+ type.indexOf('{"error":') == 0 ? '!Error' : type.substring(type
-													.lastIndexOf(".") + 1),
+											+ (type.indexOf('{"error":') == 0 ? '!Error' : type.substring(type
+													.lastIndexOf(".") + 1)),
 									type : type.indexOf('{"error":') == 0 ? '!Error' : type,
 									leaf : false,
 									uri : context.targetPrefix + "..get~~"
