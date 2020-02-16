@@ -788,7 +788,7 @@ function populateRoot() {
 			}, function(resp, context) {
 				var type = resp.responseText;
 				if(type.indexOf('{"error":') == 0) {
-					continue;
+					retrun;
 				}
 				var isLeaf = Ext.Array.contains(leafTypes, type);
 				store.getRootNode()
