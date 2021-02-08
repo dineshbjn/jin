@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-codec-http</artifactId>
-			<version>4.0.14.Final</version>
+			<version>4.1.59.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
